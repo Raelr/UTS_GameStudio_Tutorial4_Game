@@ -81,7 +81,7 @@ public class Player : CollisionUser {
         return input.x == 0 && input.y == 0;
     }
 
-    public override bool IgnoreCollisions(RaycastHit2D hit, float direction = 0, bool isCrouching = false) {
+    protected override bool IgnoreCollisions(RaycastHit2D hit, float direction = 0, bool isCrouching = false) {
 
         bool success = false;
 

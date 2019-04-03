@@ -65,7 +65,7 @@ public class Controller2D : RayCastUser {
 
     Vector3 velocity;
 
-    CollisionInformation collisionInformation;
+    public CollisionInformation collisionInformation;
 
     public delegate bool IgnoreCollisionHandler(RaycastHit2D hit, float direction = 0, bool isCrouching = false);
 
