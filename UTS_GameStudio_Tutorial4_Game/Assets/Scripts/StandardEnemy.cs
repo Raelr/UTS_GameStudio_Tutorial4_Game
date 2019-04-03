@@ -5,9 +5,9 @@ using UnityEngine;
 public class StandardEnemy : Enemy
 {
 
-    private void Start() {
+    private void Awake() {
 
-        controller = GetComponent<Controller2D>();
+        Init();
         direction = -Vector3.right;
     }
 
