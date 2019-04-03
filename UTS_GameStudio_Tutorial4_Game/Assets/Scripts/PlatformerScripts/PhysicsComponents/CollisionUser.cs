@@ -12,7 +12,7 @@ public abstract class CollisionUser : MonoBehaviour
     [SerializeField]
     protected Controller2D controller;
 
-    public abstract bool IgnoreCollisions(RaycastHit2D hit, float direction = 0, bool isCrouching = false);
+    protected abstract bool IgnoreCollisions(RaycastHit2D hit, float direction = 0, bool isCrouching = false);
 
     protected void Initialise() {
 
