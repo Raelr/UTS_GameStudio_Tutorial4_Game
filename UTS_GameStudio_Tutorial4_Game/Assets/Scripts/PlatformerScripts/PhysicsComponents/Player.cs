@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,6 +17,7 @@ public class Player : CollisionUser {
         Initialise();
 
         controller.onCollision += OnEnemyHit;
+        controller.onCollision += OnCoinCollision;
     }
 
     private void Start() {
@@ -96,6 +98,13 @@ public class Player : CollisionUser {
         }
     }
 
+    public void OnCoinCollision(RaycastHit2D hit) {
+        if (hit.transform.tag == "Coin") {
+            Coin coin = hit.transform.GetComponent<Coin>();
+            coin.OnCoinPickUp();
+        }
+    }
+
     protected override bool IgnoreCollisions(RaycastHit2D hit, float direction = 0, bool isCrouching = false) {
 
         bool success = false;
@@ -108,7 +117,7 @@ public class Player : CollisionUser {
 
         } else {
 
-            success = hit.distance == 0 || hit.transform.tag == "Enemy";
+            success = hit.distance == 0 || hit.transform.tag == "Enemy" || hit.transform.tag == "Coin";
         }
         
 
