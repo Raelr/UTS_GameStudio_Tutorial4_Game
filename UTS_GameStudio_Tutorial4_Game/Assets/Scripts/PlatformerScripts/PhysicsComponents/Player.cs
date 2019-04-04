@@ -14,6 +14,10 @@ public class Player : CollisionUser {
     private void Awake() {
 
         Initialise();
+
+        GameManager.instance.Player = this;
+
+        controller.onCollision += OnEnemyHit;
     }
 
     void Update() {
@@ -81,13 +85,29 @@ public class Player : CollisionUser {
         return input.x == 0 && input.y == 0;
     }
 
+    public void OnEnemyHit(RaycastHit2D hit) {
+
+        if (hit.transform.tag == "Enemy") {
+
+            GameManager.instance.KillPlayer();
+        }
+    }
+
     protected override bool IgnoreCollisions(RaycastHit2D hit, float direction = 0, bool isCrouching = false) {
 
         bool success = false;
 
         bool CheckingDirection = direction != 0;
 
-        success = currentPlatform.AllowedToJumpThrough(direction, true) || isCrouching && currentPlatform.CanFallThrough() || hit.distance == 0;
+        if (currentPlatform != null) {
+
+            success = currentPlatform.AllowedToJumpThrough(direction, true) || isCrouching && currentPlatform.CanFallThrough() || hit.distance == 0 || hit.transform.tag == "Enemy";
+
+        } else {
+
+            success = hit.distance == 0 || hit.transform.tag == "Enemy";
+        }
+        
 
         return success;
     }

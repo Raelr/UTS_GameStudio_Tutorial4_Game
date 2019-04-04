@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class StandardEnemy : Enemy
 {
-
     private void Awake() {
 
         Init();
@@ -12,6 +11,7 @@ public class StandardEnemy : Enemy
     }
 
     private void Update() {
+
         Move();
     }
 }

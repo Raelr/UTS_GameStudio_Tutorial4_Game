@@ -9,9 +9,6 @@ public abstract class Enemy : CollisionUser {
     public bool CanMove { get { return canMove; } set { canMove = value; } }
 
     [SerializeField]
-    protected Controller2D controller;
-
-    [SerializeField]
     protected Collider2D collider;
 
     [SerializeField]
