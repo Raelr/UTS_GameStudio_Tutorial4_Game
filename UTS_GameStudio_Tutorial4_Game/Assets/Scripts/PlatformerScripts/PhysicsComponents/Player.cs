@@ -15,9 +15,12 @@ public class Player : CollisionUser {
 
         Initialise();
 
-        GameManager.instance.Player = this;
-
         controller.onCollision += OnEnemyHit;
+    }
+
+    private void Start() {
+
+        GameManager.instance.Player = this;
     }
 
     void Update() {
