@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabs:
-  - {fileID: 8609027841117242504, guid: 58351e379948f4e46b1c935a30f6871d, type: 3}
+  - {fileID: 8609027841117242504, guid: 058c01fc4b730fc489ccbc26caf1e994, type: 3}
 --- !u!4 &287755142
 Transform:
   m_ObjectHideFlags: 0
@@ -236,7 +236,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 9.01
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

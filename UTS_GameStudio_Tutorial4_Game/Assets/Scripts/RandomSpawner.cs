@@ -20,6 +20,17 @@ public class RandomSpawner : MonoBehaviour
 
     int currentEnemies;
 
+    private void Awake() {
+
+        GameObject[] doorObjects = GameObject.FindGameObjectsWithTag("Door");
+
+        doors = new Door[doorObjects.Length];
+
+        for (int i = 0; i < doorObjects.Length; i++) {
+            doors[i] = doorObjects[i].GetComponent<Door>();
+        }
+    }
+
     private void Start() {
 
         currentEnemies = 0;
