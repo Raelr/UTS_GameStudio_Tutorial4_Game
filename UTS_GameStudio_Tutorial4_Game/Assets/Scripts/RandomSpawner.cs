@@ -8,10 +8,23 @@ public class RandomSpawner : MonoBehaviour
     Door[] doors;
 
     [SerializeField]
-    Vector2 spawnOffset;
+    Vector3 spawnOffset;
+
+    [SerializeField]
+    float spawnDelay;
 
     bool timerSet = false;
-    
+
+    [SerializeField]
+    int maxEnemies;
+
+    int currentEnemies;
+
+    private void Start() {
+
+        currentEnemies = 0;
+    }
+
     void Update()
     {
         SpawnEnemiesRandomly();
@@ -30,7 +43,7 @@ public class RandomSpawner : MonoBehaviour
 
     IEnumerator SpawnTimer() {
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(spawnDelay);
 
         SpawnAtRandomDoor();
 
@@ -39,12 +52,19 @@ public class RandomSpawner : MonoBehaviour
 
     void SpawnAtRandomDoor() {
 
-        int maxDoorNumber = doors.Length;
+        if (currentEnemies < maxEnemies) {
 
-        int doorNumber = Random.Range(0, maxDoorNumber);
+            int maxDoorNumber = doors.Length;
 
-        if (doors[doorNumber] != null) {
-            Debug.Log("Spawning enemy at " + doors[doorNumber]);
+            int doorNumber = Random.Range(0, maxDoorNumber);
+
+            if (doors[doorNumber] != null) {
+
+                Debug.Log("Spawning enemy at " + doors[doorNumber]);
+
+                doors[doorNumber].SpawnEnemy(spawnOffset);
+                currentEnemies++;
+            }
         }
     }
 }

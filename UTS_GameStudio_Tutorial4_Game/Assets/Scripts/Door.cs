@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField]
+    Enemy enemyScript;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void SpawnEnemy(Vector3 offset) {
+
+        Instantiate(enemyScript, transform.position + offset, Quaternion.identity);
     }
 }
