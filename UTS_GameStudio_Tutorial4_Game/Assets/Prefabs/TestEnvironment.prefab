@@ -421,6 +421,8 @@ MonoBehaviour:
   - {fileID: 7248335167972435451}
   - {fileID: 7242166531411191472}
   - {fileID: 1274413576216069575}
+  spawnOffset: {x: 0, y: 0}
+  maxEnemies: 3
 --- !u!1001 &4062302988239613380
 PrefabInstance:
   m_ObjectHideFlags: 0

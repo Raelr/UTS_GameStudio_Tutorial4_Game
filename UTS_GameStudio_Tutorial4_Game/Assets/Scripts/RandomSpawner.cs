@@ -11,7 +11,17 @@ public class RandomSpawner : MonoBehaviour
     Vector2 spawnOffset;
 
     bool timerSet = false;
-    
+
+    [SerializeField]
+    int maxEnemies;
+
+    int currentEnemies;
+
+    private void Start() {
+
+        currentEnemies = 0;
+    }
+
     void Update()
     {
         SpawnEnemiesRandomly();
@@ -39,12 +49,19 @@ public class RandomSpawner : MonoBehaviour
 
     void SpawnAtRandomDoor() {
 
-        int maxDoorNumber = doors.Length;
+        if (currentEnemies < maxEnemies) {
 
-        int doorNumber = Random.Range(0, maxDoorNumber);
+            int maxDoorNumber = doors.Length;
 
-        if (doors[doorNumber] != null) {
-            Debug.Log("Spawning enemy at " + doors[doorNumber]);
+            int doorNumber = Random.Range(0, maxDoorNumber);
+
+            if (doors[doorNumber] != null) {
+
+                Debug.Log("Spawning enemy at " + doors[doorNumber]);
+
+                doors[doorNumber].SpawnEnemy(spawnOffset);
+                currentEnemies++;
+            }
         }
     }
 }
