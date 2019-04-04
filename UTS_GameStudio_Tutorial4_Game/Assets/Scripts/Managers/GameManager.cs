@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
     public Player Player { get; set; }
 
     public static GameManager instance;
+
+    private int _score = 0;
     
     private void Awake() {
         
@@ -18,5 +20,9 @@ public class GameManager : MonoBehaviour
     public void KillPlayer() {
 
         LevelManager.RestartLevel();
+    }
+
+    public void IncreaseScore() {
+        _score += 10;
     }
 }
