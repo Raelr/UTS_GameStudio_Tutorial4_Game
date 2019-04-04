@@ -8,7 +8,10 @@ public class RandomSpawner : MonoBehaviour
     Door[] doors;
 
     [SerializeField]
-    Vector2 spawnOffset;
+    Vector3 spawnOffset;
+
+    [SerializeField]
+    float spawnDelay;
 
     bool timerSet = false;
 
@@ -40,7 +43,7 @@ public class RandomSpawner : MonoBehaviour
 
     IEnumerator SpawnTimer() {
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(spawnDelay);
 
         SpawnAtRandomDoor();
 
