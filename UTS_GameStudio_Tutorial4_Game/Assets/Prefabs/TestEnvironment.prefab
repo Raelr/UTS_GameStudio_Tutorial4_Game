@@ -41,7 +41,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
-  controller: {fileID: 0}
   collider: {fileID: 0}
   animator: {fileID: 0}
   renderer: {fileID: 0}
@@ -459,6 +458,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 1432747955773146294, guid: 9fbf21d1715b4b64ab39af6099627b68,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1432747955773146294, guid: 9fbf21d1715b4b64ab39af6099627b68,
+        type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 1432747955773146314, guid: 9fbf21d1715b4b64ab39af6099627b68,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -594,6 +603,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9010406796203310090, guid: e003b5371dbe58a478917ed1987b99cc,
+        type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 1536
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e003b5371dbe58a478917ed1987b99cc, type: 3}
