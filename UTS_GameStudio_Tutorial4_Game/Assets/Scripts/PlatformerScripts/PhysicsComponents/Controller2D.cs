@@ -27,6 +27,8 @@ public class Controller2D : RayCastUser {
 
     public bool IsCrouching { get; set; }
 
+    public CollisionInformation CollisionInformation { get { return collisionInformation; } }
+
     [Header("Collision Mask")]
     [SerializeField]
     LayerMask layerMask;
@@ -64,8 +66,6 @@ public class Controller2D : RayCastUser {
     float maxClimbAngle;
 
     Vector3 velocity;
-
-    public CollisionInformation collisionInformation;
 
     public delegate bool IgnoreCollisionHandler(RaycastHit2D hit, float direction = 0, bool isCrouching = false);
 
@@ -344,29 +344,6 @@ public class Controller2D : RayCastUser {
             collisionInformation.isBelow = true;
             collisionInformation.isClimbingSlope = true;
             collisionInformation.slopeAngle = slopeAngle;
-        }
-    }
-
-    /// <summary>
-    /// Data structure determining which directions a collision is occuring in. 
-    /// </summary>
-
-    public struct CollisionInformation {
-        public bool isBelow, isAbove;
-        public bool isRight, isLeft;
-
-        public bool isClimbingSlope;
-        public float slopeAngle, slopeAngleOld;
-        public bool isPlatform;
-
-        public void Reset() {
-            isBelow = isAbove = false;
-            isRight = isLeft = false;
-            isClimbingSlope = false;
-
-            slopeAngleOld = slopeAngle;
-            slopeAngle = 0;
-            isPlatform = false;
         }
     }
 }
