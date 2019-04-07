@@ -101,7 +101,7 @@ public class Controller2D : RayCastUser {
     /// </summary>
     /// <param name="input"> The velocity vector used to move the player </param>
 
-    public void Move(Vector3 input) {
+    public void Move(Vector3 input, bool isStandingOnPlatform = false) {
 
         // Sets the positions where the raycasts will shoot from. Can account for changes in sprite and collider size. 
         UpdateRayCastOrigins();
@@ -117,13 +117,16 @@ public class Controller2D : RayCastUser {
         // Update Collisons if player is moving vertically (jumping or falling).
         if (input.y != 0) {
             VerticalCollisions(ref input);
-
         }
 
         if (!Utilities.Vector3Equals(input, Vector3.zero)) {
 
             // Move the player.
             transform.Translate(input);
+
+            if (isStandingOnPlatform) {
+                collisionInformation.isBelow = true;
+            }
 
             Physics2D.SyncTransforms();
         }
@@ -135,7 +138,7 @@ public class Controller2D : RayCastUser {
     /// </summary>
     /// <param name="input"> The inputted Velocity vector </param>
 
-    public void ApplyMovement(Vector3 input) {
+    public void ApplyMovement(Vector3 input, bool isStandingOnPlatform = false) {
 
         // Get the velocity we need.
         float targetVelocityX = input.x * MoveSpeed;
@@ -151,7 +154,7 @@ public class Controller2D : RayCastUser {
         }
 
         // Move the player using the input velocity vector.
-        Move(velocity * Time.deltaTime);
+        Move(velocity * Time.deltaTime, isStandingOnPlatform);
     }
 
     public void ApplyGravity(ref Vector3 inputVelocity, bool isStill = false) {
@@ -227,7 +230,6 @@ public class Controller2D : RayCastUser {
                 bool isIgnoringCollisions = ignoringCollisions != null ? ignoringCollisions.Invoke(hit, directionX) : false;
 
                 if (isIgnoringCollisions) {
-
                     continue;
 
                 } else {
@@ -301,7 +303,7 @@ public class Controller2D : RayCastUser {
 
                 if (isIgnoringCollisions) {
 
-                        continue;
+                    continue;
 
                 } else {
                     // Reduce velocity vector based on its distance from the obstacle collided with. 

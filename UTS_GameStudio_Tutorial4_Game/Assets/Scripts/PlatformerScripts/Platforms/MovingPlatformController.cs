@@ -8,6 +8,10 @@ public class MovingPlatformController : RayCastUser {
 
     public LayerMask passengerMask;
 
+    List<PassengerMovement> passengerMovements = new List<PassengerMovement>();
+
+    Dictionary<Transform, Controller2D> controllers = new Dictionary<Transform, Controller2D>();
+
     public override void Start() {
 
         base.Start();
@@ -18,13 +22,34 @@ public class MovingPlatformController : RayCastUser {
 
         Vector3 velocity = move * Time.deltaTime;
 
-        MovePassengers(velocity);
+        CalculatePassengerMovement(velocity);
+
+        MovePassengers(true);
         transform.Translate(velocity);
+        MovePassengers(false);
     }
 
-    void MovePassengers(Vector3 velocity) {
+    void MovePassengers(bool isMovingBeforePlatform) {
+
+        foreach(PassengerMovement passenger in passengerMovements) {
+
+            if (!controllers.ContainsKey(passenger.transform)) {
+
+                controllers.Add(passenger.transform, passenger.transform.GetComponent<Controller2D>());
+            }
+
+            if (passenger.isMovingBeforePlatform == isMovingBeforePlatform) {
+
+                controllers[passenger.transform].Move(passenger.velocity, passenger.isStandingOnPlatform);
+            }
+        }
+    }
+
+    void CalculatePassengerMovement(Vector3 velocity) {
 
         HashSet<Transform> movedPassengers = new HashSet<Transform>();
+
+        passengerMovements.Clear();
 
         float directionX = Mathf.Sign(velocity.x);
         float directionY = Mathf.Sign(velocity.y);
@@ -37,7 +62,7 @@ public class MovingPlatformController : RayCastUser {
 
             for (int i = 0; i < verticalRayCount; i++) {
 
-                // Detemrine where to start shooting the rays from (bottom left of player or bottom right)
+                // Deterrmine where to start shooting the rays from (bottom left of player or bottom right)
                 Vector2 rayOrigin = (directionY == -1) ? rayCastOrigins.bottomLeft : rayCastOrigins.topLeft;
 
                 rayOrigin += Vector2.right * (verticalRaySpacing * i);
@@ -54,7 +79,7 @@ public class MovingPlatformController : RayCastUser {
                         float pushY = velocity.y - (hit.distance - skinWidth) * directionY;
                         float pushX = (directionY == 1) ? velocity.x : 0;
 
-                        hit.transform.Translate(new Vector3(pushX, pushY));
+                        passengerMovements.Add(new PassengerMovement(hit.transform, new Vector3(pushX, pushY), directionY == 1, true)); 
                     }
                 }
             }
@@ -83,10 +108,25 @@ public class MovingPlatformController : RayCastUser {
                         float pushY = velocity.y;
                         float pushX = velocity.x;
 
-                        hit.transform.Translate(new Vector3(pushX, pushY));
+                        passengerMovements.Add(new PassengerMovement(hit.transform, new Vector3(pushX, pushY), true, false));
                     }
                 }
             }
+        }
+    }
+
+    struct PassengerMovement {
+        public Transform transform;
+        public Vector3 velocity;
+        public bool isStandingOnPlatform;
+        public bool isMovingBeforePlatform;
+
+        public PassengerMovement(Transform _transform, Vector3 _velocity, bool _isStandingOnPlatform, bool _isMovingBeforePlatform) {
+
+            transform = _transform;
+            velocity = _velocity;
+            isStandingOnPlatform = _isStandingOnPlatform;
+            isMovingBeforePlatform = _isMovingBeforePlatform;
         }
     }
 }
