@@ -26,6 +26,8 @@ public class RayCastUser : MonoBehaviour {
 
     protected RayCastOrgins rayCastOrigins;
 
+    protected CollisionInformation collisionInformation;
+
     public virtual void Start() {
 
         boxCollider = GetComponent<BoxCollider2D>();
@@ -90,5 +92,28 @@ public class RayCastUser : MonoBehaviour {
 
         public Vector2 topLeft, topRight;
         public Vector2 bottomLeft, bottomRight;
+    }
+
+    /// <summary>
+    /// Data structure determining which directions a collision is occuring in. 
+    /// </summary>
+
+    public struct CollisionInformation {
+        public bool isBelow, isAbove;
+        public bool isRight, isLeft;
+
+        public bool isClimbingSlope;
+        public float slopeAngle, slopeAngleOld;
+        public bool isPlatform;
+
+        public void Reset() {
+            isBelow = isAbove = false;
+            isRight = isLeft = false;
+            isClimbingSlope = false;
+
+            slopeAngleOld = slopeAngle;
+            slopeAngle = 0;
+            isPlatform = false;
+        }
     }
 }

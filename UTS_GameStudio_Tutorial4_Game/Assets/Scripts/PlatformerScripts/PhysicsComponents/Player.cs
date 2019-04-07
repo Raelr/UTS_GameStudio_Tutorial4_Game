@@ -120,7 +120,6 @@ public class Player : CollisionUser {
             success = hit.distance == 0 || hit.transform.tag == "Enemy" || hit.transform.tag == "Coin";
         }
         
-
         return success;
     }
 }
