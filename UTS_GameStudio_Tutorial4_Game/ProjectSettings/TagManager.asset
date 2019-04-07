@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Door
   - Coin
+  - Elevator
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - Enemy
   - Door
   - Coin
-  - 
+  - EnemyObstacles
   - 
   - 
   - 

@@ -20,6 +20,19 @@ public class RandomSpawner : MonoBehaviour
 
     int currentEnemies;
 
+    List<Door> unusableDoors = new List<Door>();
+
+    private void Awake() {
+
+        GameObject[] doorObjects = GameObject.FindGameObjectsWithTag("Door");
+
+        doors = new Door[doorObjects.Length];
+
+        for (int i = 0; i < doorObjects.Length; i++) {
+            doors[i] = doorObjects[i].GetComponent<Door>();
+        }
+    }
+
     private void Start() {
 
         currentEnemies = 0;
@@ -58,13 +71,23 @@ public class RandomSpawner : MonoBehaviour
 
             int doorNumber = Random.Range(0, maxDoorNumber);
 
-            if (doors[doorNumber] != null) {
-
-                Debug.Log("Spawning enemy at " + doors[doorNumber]);
+            if (doors[doorNumber] != null && !unusableDoors.Contains(doors[doorNumber])) {
 
                 doors[doorNumber].SpawnEnemy(spawnOffset);
+
+                unusableDoors.Add(doors[doorNumber]);
+
+                StartCoroutine(DoorCoolDown(doors[doorNumber]));
+
                 currentEnemies++;
             }
         }
+    }
+
+    IEnumerator DoorCoolDown(Door door) {
+
+        yield return new WaitForSeconds(spawnDelay + 1f);
+
+        unusableDoors.Remove(door);
     }
 }

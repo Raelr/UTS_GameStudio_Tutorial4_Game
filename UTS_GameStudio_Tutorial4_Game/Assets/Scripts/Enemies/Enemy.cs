@@ -25,11 +25,11 @@ public abstract class Enemy : CollisionUser {
 
     protected void Move() {
 
-        if (Utilities.Vector3Equals(direction, Vector3.right) && controller.collisionInformation.isRight) {
+        if (Utilities.Vector3Equals(direction, Vector3.right) && controller.CollisionInformation.isRight) {
 
             direction = -Vector3.right;
 
-        } else if (Utilities.Vector3Equals(direction, -Vector3.right) && controller.collisionInformation.isLeft) {
+        } else if (Utilities.Vector3Equals(direction, -Vector3.right) && controller.CollisionInformation.isLeft) {
 
             direction = Vector3.right;
         }
