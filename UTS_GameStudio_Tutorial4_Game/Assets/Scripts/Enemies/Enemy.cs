@@ -23,6 +23,8 @@ public abstract class Enemy : CollisionUser {
 
     protected bool canMove;
 
+    bool instantiated = false;
+
     protected void Move() {
 
         if (Utilities.Vector3Equals(direction, Vector3.right) && controller.CollisionInfo.isRight) {
@@ -78,10 +80,37 @@ public abstract class Enemy : CollisionUser {
 
         controller.onCollision += CheckPlatformCollider;
 
+        controller.onCollision += OnPlayerCollisionAfterInstatiation;
+
     }
 
     protected override bool IgnoreCollisions(RaycastHit2D hit, float direction = 0, bool isCrouching = false) {
 
-        return false;
+        return hit.transform.tag == "Player";
     }
+
+    protected void OnPlayerCollisionAfterInstatiation(RaycastHit2D[] hits) {
+
+        foreach (RaycastHit2D hit in hits) {
+
+            if (hit.transform.tag == "Player" && instantiated) {
+                GameManager.instance.KillPlayer();
+            }
+        }
+
+    }
+
+    public void InitialiseEnemy() {
+
+        StartCoroutine(Initialised());
+    }
+
+    protected IEnumerator Initialised() {
+
+        instantiated = true;
+
+        yield return null;
+
+        instantiated = false;
+    } 
 }

@@ -18,6 +18,8 @@ public class Player : CollisionUser {
 
     public event PlayerMovedHandler playerMoved;
 
+    Dictionary<Collider2D, Door> doors = new Dictionary<Collider2D, Door>();
+
     private void Awake() {
 
         Initialise();
@@ -150,6 +152,7 @@ public class Player : CollisionUser {
         foreach (RaycastHit2D hit in hits) {
             
             if (hit.transform.tag == "Door") {
+
                 hasDoor = true;
 
                 if (routine == null) {
