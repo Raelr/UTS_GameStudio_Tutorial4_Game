@@ -11,6 +11,8 @@ public class Player : CollisionUser {
     bool isHiding;
     Material myMat;
 
+    Coroutine routine;
+
     // Delegate for anything which needs to know whether the player is moving
     public delegate void PlayerMovedHandler();
 
@@ -24,7 +26,10 @@ public class Player : CollisionUser {
         controller.onCollision += OnCoinCollision;
         controller.onCollision += OnEnterDoor;
 
+
         myMat = GetComponent<Renderer>().material;
+
+        inDoor = false;
     }
 
     private void Start() {
@@ -33,13 +38,15 @@ public class Player : CollisionUser {
     }
 
     void Update() {
+
         MoveByInput();
-        Debug.Log(inDoor);
+        //Debug.Log(inDoor);
         Hide(inDoor && isHiding);
         //inDoor = false;
     }
 
-    void Hide(bool cond){
+    void Hide(bool cond) {
+
         myMat.color = new Color(myMat.color.r, myMat.color.g, myMat.color.b, cond ? 0.3f : 1f);
     }
 
@@ -57,8 +64,10 @@ public class Player : CollisionUser {
         bool crouching;
 
         if (Input.GetKey("s") || Input.GetKey("down")) {
+
             crouching = true;
-            isHiding = true;
+            isHiding = inDoor;
+
         } else {
             crouching = false;
         }
@@ -106,23 +115,54 @@ public class Player : CollisionUser {
         return input.x == 0 && input.y == 0;
     }
 
-    public void OnEnemyHit(RaycastHit2D hit) {
+    public void OnEnemyHit(RaycastHit2D[] hits) {
 
-        if (hit.transform.tag == "Enemy" && !(isHiding && inDoor)) {
+        foreach (RaycastHit2D hit in hits) {
 
-            GameManager.instance.KillPlayer();
+            if (hit.transform.tag == "Enemy" && !(isHiding)) {
+
+                GameManager.instance.KillPlayer();
+            }
+        }
+
+    }
+
+    public void OnCoinCollision(RaycastHit2D[] hits) {
+
+        foreach (RaycastHit2D hit in hits) {
+            if (hit.transform.tag == "Coin") {
+                Coin coin = hit.transform.GetComponent<Coin>();
+                coin.OnCoinPickUp();
+            }
         }
     }
 
-    public void OnCoinCollision(RaycastHit2D hit) {
-        if (hit.transform.tag == "Coin") {
-            Coin coin = hit.transform.GetComponent<Coin>();
-            coin.OnCoinPickUp();
-        }
+    private void OnEnterDoor(RaycastHit2D[] hits) {
+
+        inDoor = HasDoorCollider(hits);
     }
 
-    private void OnEnterDoor(RaycastHit2D hit) {
-        inDoor = hit.transform.tag == "Door";
+    bool HasDoorCollider(RaycastHit2D[] hits) {
+
+        bool hasDoor = false;
+        controller.ignoreNextRayCast = false;
+
+        foreach (RaycastHit2D hit in hits) {
+            
+            if (hit.transform.tag == "Door") {
+                hasDoor = true;
+
+                if (routine == null) {
+                    routine = StartCoroutine(WaitUntilNextFrame());
+                } else {
+                    routine = StartCoroutine(WaitUntilNextFrame());
+                }
+
+                break;
+            }
+        }
+
+        return hasDoor;
     }
 
     protected override bool IgnoreCollisions(RaycastHit2D hit, float direction = 0, bool isCrouching = false) {
@@ -139,7 +179,17 @@ public class Player : CollisionUser {
 
             success = hit.distance == 0 || hit.transform.tag == "Enemy" || hit.transform.tag == "Coin" || hit.transform.tag == "Door";
         }
-        
+
         return success;
+    }
+
+    IEnumerator WaitUntilNextFrame() {
+
+        controller.onCollision -= OnEnterDoor;
+
+        yield return null;
+
+        controller.onCollision += OnEnterDoor;
+
     }
 }
