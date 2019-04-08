@@ -13,6 +13,10 @@ public class GameManager : MonoBehaviour
     private Text _scoreUI;
     private Text _pauseUI;
     private Text _pauseInfoUI;
+    private Image _gameOverPanel;
+    private Text _gameOverUI;
+    private Text _gameOverInfoUI;
+    private bool _playerDead = false;
     
     private void Awake() {
         
@@ -25,6 +29,9 @@ public class GameManager : MonoBehaviour
         _scoreUI = GameObject.Find("ScoreUI").GetComponent<Text>();
         _pauseUI = GameObject.Find("PauseUI").GetComponent<Text>();
         _pauseInfoUI = GameObject.Find("PauseInstructionsUI").GetComponent<Text>();
+        _gameOverPanel = GameObject.Find("Panel").GetComponent<Image>();
+        _gameOverUI = GameObject.Find("GameOverUI").GetComponent<Text>();
+        _gameOverInfoUI = GameObject.Find("GameOverInfoUI").GetComponent<Text>();
     }
 
     private void Update() {
@@ -45,11 +52,23 @@ public class GameManager : MonoBehaviour
             _pauseUI.color = c;
             _pauseInfoUI.color = c;
         } else if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale == 0f) Application.Quit();
+
+        if (_playerDead && Input.GetKeyDown(KeyCode.Return) && Time.timeScale == 0f) {
+            _playerDead = false;
+            Time.timeScale = 1f;
+            LevelManager.RestartLevel();
+        } else if (_playerDead && Input.GetKeyDown(KeyCode.Escape) && Time.timeScale == 0f)
+            Application.Quit();
     }
 
     public void KillPlayer() {
-
-        LevelManager.RestartLevel();
+        Time.timeScale = 0f;
+        Color c = _gameOverPanel.color;
+        c.a = 255;
+        _gameOverPanel.color = c;
+        _gameOverUI.color = c;
+        _gameOverInfoUI.color = c;
+        _playerDead = true;
     }
 
     public void IncreaseScore() {
