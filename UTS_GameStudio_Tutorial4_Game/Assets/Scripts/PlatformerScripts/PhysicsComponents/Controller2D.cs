@@ -227,52 +227,60 @@ public class Controller2D : RayCastUser {
             rayOrigin += Vector2.up * (horizontalRaySpacing * i);
 
             // Shoot a ray that is looking for objects in the correct layermask.
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * directionX, rayLength, layerMask);
+            RaycastHit2D[] hits = Physics2D.RaycastAll(rayOrigin, Vector2.right * directionX, rayLength, layerMask);
 
-            if (hit) {
-
-                onCollision?.Invoke(hit);
-
-                bool isIgnoringCollisions = ignoringCollisions != null ? ignoringCollisions.Invoke(hit, directionX) : false;
-
-                if (isIgnoringCollisions) {
+            foreach (RaycastHit2D hit in hits) {
+                if (hit.transform == transform) {
                     continue;
-
                 } else {
 
-                    float slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
+                    if (hit) {
 
-                    if (i == 0 && slopeAngle <= maxClimbAngle) {
-                        float distanceToStart = 0;
+                        onCollision?.Invoke(hit);
 
-                        if (slopeAngle != collisionInformation.slopeAngleOld) {
-                            distanceToStart = hit.distance - skinWidth;
-                            //inputVelocity.x -= distanceToStart - directionX;
-                        }
-                        ClimbSlope(ref inputVelocity, slopeAngle);
-                        inputVelocity.x += distanceToStart * directionX;
-                    }
+                        bool isIgnoringCollisions = ignoringCollisions != null ? ignoringCollisions.Invoke(hit, directionX) : false;
 
-                    if (!collisionInformation.isClimbingSlope || slopeAngle > maxClimbAngle) {
-                        // Reduce velocity vector based on its distance from the obstacle collided with. 
-                        inputVelocity.x = (hit.distance - skinWidth) * directionX;
-                        rayLength = hit.distance;
+                        if (isIgnoringCollisions) {
+                            continue;
 
-                        if (collisionInformation.isClimbingSlope) {
-                            inputVelocity.y = Mathf.Tan(collisionInformation.slopeAngle * Mathf.Deg2Rad) * Mathf.Abs(inputVelocity.x);
-                        }
+                        } else {
 
-                        // Update the collision information struct to indicate that a collision has occurred.
-                        collisionInformation.isLeft = directionX == -1;
-                        collisionInformation.isRight = directionX == 1;
+                            float slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
 
-                        if (collisionInformation.isLeft || collisionInformation.isRight) {
+                            if (i == 0 && slopeAngle <= maxClimbAngle) {
+                                float distanceToStart = 0;
 
-                            onHorizontalCollision?.Invoke(hit);
+                                if (slopeAngle != collisionInformation.slopeAngleOld) {
+                                    distanceToStart = hit.distance - skinWidth;
+                                    //inputVelocity.x -= distanceToStart - directionX;
+                                }
+                                ClimbSlope(ref inputVelocity, slopeAngle);
+                                inputVelocity.x += distanceToStart * directionX;
+                            }
+
+                            if (!collisionInformation.isClimbingSlope || slopeAngle > maxClimbAngle) {
+                                // Reduce velocity vector based on its distance from the obstacle collided with. 
+                                inputVelocity.x = (hit.distance - skinWidth) * directionX;
+                                rayLength = hit.distance;
+
+                                if (collisionInformation.isClimbingSlope) {
+                                    inputVelocity.y = Mathf.Tan(collisionInformation.slopeAngle * Mathf.Deg2Rad) * Mathf.Abs(inputVelocity.x);
+                                }
+
+                                // Update the collision information struct to indicate that a collision has occurred.
+                                collisionInformation.isLeft = directionX == -1;
+                                collisionInformation.isRight = directionX == 1;
+
+                                if (collisionInformation.isLeft || collisionInformation.isRight) {
+
+                                    onHorizontalCollision?.Invoke(hit);
+                                }
+                            }
                         }
                     }
                 }
             }
+
             // Draw a ray for the purposes of debugging
             Debug.DrawRay(rayOrigin, Vector2.right * directionX * rayLength, Color.red);
         }
@@ -299,33 +307,41 @@ public class Controller2D : RayCastUser {
             rayOrigin += Vector2.right * (verticalRaySpacing * i + velocity.x);
 
             // Shoot a ray that is looking for objects in the correct layermask.
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, layerMask);
+            RaycastHit2D[] hits = Physics2D.RaycastAll(rayOrigin, Vector2.up * directionY, rayLength, layerMask);
 
-            if (hit) {
+            foreach (RaycastHit2D hit in hits) {
 
-                onCollision?.Invoke(hit);
-
-                bool isIgnoringCollisions = ignoringCollisions != null ? ignoringCollisions.Invoke(hit, directionY, IsCrouching) : false;
-
-                if (isIgnoringCollisions) {
-
+                if (hit.transform == transform) {
                     continue;
-
                 } else {
-                    // Reduce velocity vector based on its distance from the obstacle collided with. 
-                    velocity.y = (hit.distance - skinWidth) * directionY;
-                    rayLength = hit.distance;
 
-                    if (collisionInformation.isClimbingSlope) {
-                        velocity.x = velocity.y / Mathf.Tan(collisionInformation.slopeAngle * Mathf.Deg2Rad) * Mathf.Sign(velocity.x);
-                    }
+                    if (hit) {
 
-                    // Update the collision information struct to indicate that a collision has occurred.
-                    collisionInformation.isBelow = directionY == -1;
-                    collisionInformation.isAbove = directionY == 1;
+                        onCollision?.Invoke(hit);
 
-                    if (collisionInformation.isAbove || collisionInformation.isBelow) {
-                        onVerticalCollision?.Invoke(hit);
+                        bool isIgnoringCollisions = ignoringCollisions != null ? ignoringCollisions.Invoke(hit, directionY, IsCrouching) : false;
+
+                        if (isIgnoringCollisions) {
+
+                            continue;
+
+                        } else {
+                            // Reduce velocity vector based on its distance from the obstacle collided with. 
+                            velocity.y = (hit.distance - skinWidth) * directionY;
+                            rayLength = hit.distance;
+
+                            if (collisionInformation.isClimbingSlope) {
+                                velocity.x = velocity.y / Mathf.Tan(collisionInformation.slopeAngle * Mathf.Deg2Rad) * Mathf.Sign(velocity.x);
+                            }
+
+                            // Update the collision information struct to indicate that a collision has occurred.
+                            collisionInformation.isBelow = directionY == -1;
+                            collisionInformation.isAbove = directionY == 1;
+
+                            if (collisionInformation.isAbove || collisionInformation.isBelow) {
+                                onVerticalCollision?.Invoke(hit);
+                            }
+                        }
                     }
                 }
             }
