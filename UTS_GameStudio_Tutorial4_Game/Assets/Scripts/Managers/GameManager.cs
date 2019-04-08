@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
         _pauseInfoUI = GameObject.Find("PauseInstructionsUI").GetComponent<Text>();
         _gameOverPanel = GameObject.Find("Panel").GetComponent<Image>();
         _gameOverUI = GameObject.Find("GameOverUI").GetComponent<Text>();
-        _gameOverInfoUI = GameObject.Find("GameOverInfoUI").GetComponent<Text>();
+        _gameOverInfoUI = GameObject.Find("GameOverInstructionsUI").GetComponent<Text>();
     }
 
     private void Update() {
