@@ -15,6 +15,8 @@ public class Lift : MonoBehaviour
     [SerializeField]
     BoxCollider2D elevatorShaftBounds;
 
+    Player player;
+
     Bounds liftDimensions;
 
     float liftMaxHeight;
@@ -26,12 +28,20 @@ public class Lift : MonoBehaviour
         platformController = GetComponent<MovingPlatformController>();
 
         CalculateLiftBounds();
+        player = GameObject.FindWithTag("Player").GetComponent<Player>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Move(Input.GetAxisRaw("Vertical"));
+        if (IsPlayerOnMe())
+            Move(Input.GetAxisRaw("Vertical"));
+    }
+
+    public bool IsPlayerOnMe(){
+        Vector3 extent = gameObject.GetComponent<Collider2D>().bounds.extents;
+        return player.transform.position.x > transform.position.x - extent.x&&
+           player.transform.position.x < transform.position.x + extent.x;
     }
 
     void CalculateLiftBounds() {

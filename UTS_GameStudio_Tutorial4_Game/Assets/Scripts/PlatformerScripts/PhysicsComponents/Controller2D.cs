@@ -67,11 +67,13 @@ public class Controller2D : RayCastUser {
 
     Vector3 velocity;
 
+    public bool ignoreNextRayCast;
+
     public delegate bool IgnoreCollisionHandler(RaycastHit2D hit, float direction = 0, bool isCrouching = false);
 
     public IgnoreCollisionHandler ignoringCollisions;
 
-    public delegate void CollisionHandler(RaycastHit2D hit);
+    public delegate void CollisionHandler(RaycastHit2D[] hits);
 
     public CollisionHandler onCollision;
 
@@ -236,7 +238,7 @@ public class Controller2D : RayCastUser {
 
                     if (hit) {
 
-                        onCollision?.Invoke(hit);
+                        onCollision?.Invoke(hits);
 
                         bool isIgnoringCollisions = ignoringCollisions != null ? ignoringCollisions.Invoke(hit, directionX) : false;
 
@@ -280,7 +282,6 @@ public class Controller2D : RayCastUser {
                     }
                 }
             }
-
             // Draw a ray for the purposes of debugging
             Debug.DrawRay(rayOrigin, Vector2.right * directionX * rayLength, Color.red);
         }
@@ -317,7 +318,7 @@ public class Controller2D : RayCastUser {
 
                     if (hit) {
 
-                        onCollision?.Invoke(hit);
+                        onCollision?.Invoke(hits);
 
                         bool isIgnoringCollisions = ignoringCollisions != null ? ignoringCollisions.Invoke(hit, directionY, IsCrouching) : false;
 

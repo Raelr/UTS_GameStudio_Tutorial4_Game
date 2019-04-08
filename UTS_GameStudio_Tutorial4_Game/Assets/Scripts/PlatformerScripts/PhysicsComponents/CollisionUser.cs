@@ -23,12 +23,15 @@ public abstract class CollisionUser : MonoBehaviour
         controller.onCollision += CheckPlatformCollider;
     }
 
-    public void CheckPlatformCollider(RaycastHit2D hit) {
+    public void CheckPlatformCollider(RaycastHit2D[] hits) {
 
-        if (hit.collider != currentPlatformCollider) {
+        foreach (RaycastHit2D hit in hits) {
 
-            currentPlatformCollider = hit.collider;
-            currentPlatform = hit.transform.GetComponent<Platform>();
+            if (hit.collider != currentPlatformCollider) {
+
+                currentPlatformCollider = hit.collider;
+                currentPlatform = hit.transform.GetComponent<Platform>();
+            }
         }
     }
 }

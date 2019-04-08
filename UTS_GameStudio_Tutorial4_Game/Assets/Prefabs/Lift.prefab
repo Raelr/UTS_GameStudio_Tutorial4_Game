@@ -124,6 +124,7 @@ MonoBehaviour:
   platformController: {fileID: 5749582608937711562}
   liftBounds: {fileID: 2368713950012091349}
   elevatorShaftBounds: {fileID: 0}
+  player: {fileID: 9010406796203310091, guid: e003b5371dbe58a478917ed1987b99cc, type: 3}
 --- !u!114 &5749582608937711562
 MonoBehaviour:
   m_ObjectHideFlags: 0
