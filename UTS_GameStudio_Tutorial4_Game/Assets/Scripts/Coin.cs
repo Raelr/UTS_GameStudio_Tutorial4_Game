@@ -5,7 +5,8 @@ using UnityEngine;
 public class Coin : MonoBehaviour
 {
     void Start() {
-        Destroy(this.gameObject, 10.0f); //Self-destruct coin after 10 seconds
+
+        StartCoroutine(WaitTenSeconds()); //Self-destruct coin after 10 seconds
     }
     
     void Update() {
@@ -13,7 +14,20 @@ public class Coin : MonoBehaviour
     }
 
     public void OnCoinPickUp() {
+
+        RandomSpawner.instance.DecrementCoins();
+
         GameManager.instance.IncreaseScore();
+
+        Destroy(this.gameObject);
+    }
+
+    IEnumerator WaitTenSeconds() {
+
+        yield return new WaitForSeconds(10f);
+
+        RandomSpawner.instance.DecrementCoins();
+
         Destroy(this.gameObject);
     }
 }

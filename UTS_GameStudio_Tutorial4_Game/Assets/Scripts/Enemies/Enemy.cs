@@ -77,10 +77,11 @@ public abstract class Enemy : CollisionUser {
         controller.ignoringCollisions += IgnoreCollisions;
 
         controller.onCollision += CheckPlatformCollider;
+
     }
 
     protected override bool IgnoreCollisions(RaycastHit2D hit, float direction = 0, bool isCrouching = false) {
 
-        return hit.transform.tag == "Enemy";
+        return false;
     }
 }
