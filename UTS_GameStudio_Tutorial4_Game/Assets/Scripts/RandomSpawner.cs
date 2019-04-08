@@ -86,7 +86,7 @@ public class RandomSpawner : MonoBehaviour
 
     IEnumerator DoorCoolDown(Door door) {
 
-        yield return new WaitForSeconds(spawnDelay + 1f);
+        yield return new WaitForSeconds(spawnDelay * 2f);
 
         unusableDoors.Remove(door);
     }
