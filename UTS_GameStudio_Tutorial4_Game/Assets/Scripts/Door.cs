@@ -5,7 +5,7 @@ using UnityEngine;
 public class Door : MonoBehaviour
 {
     [SerializeField]
-    Enemy enemyScript;
+    Enemy enemyScript = null;
     [SerializeField]
     Color warningColor = Color.red;
     [SerializeField]

@@ -5,7 +5,7 @@ using UnityEngine;
 public class CoinSpawn : MonoBehaviour
 {
     [SerializeField]
-    Coin coinSpawn;
+    Coin coinSpawn = null;
 
     public void SpawnCoin() {
 

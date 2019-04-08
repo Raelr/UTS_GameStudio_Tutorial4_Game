@@ -8,27 +8,27 @@ public class RandomSpawner : MonoBehaviour
     Door[] doors;
 
     [SerializeField]
-    Vector3 spawnOffset;
+    Vector3 spawnOffset = Vector3.zero;
 
     [SerializeField]
-    float enemySpawnDelay;
+    float enemySpawnDelay = 0;
 
     [SerializeField]
-    float coinSpawnDelay;
+    float coinSpawnDelay = 0;
 
     bool enemyTimerSet = false;
 
-    bool coinTimerSet;
+    bool coinTimerSet = false;
 
     [SerializeField]
-    int maxEnemies;
+    int maxEnemies = 0;
 
-    int currentEnemies;
+    int currentEnemies = 0;
 
     [SerializeField]
-    int maxCoins;
+    int maxCoins = 0;
 
-    int currentCoins;
+    int currentCoins = 0;
 
     List<Door> unusableDoors = new List<Door>();
 
@@ -163,14 +163,14 @@ public class RandomSpawner : MonoBehaviour
 
     IEnumerator coinCoolDown(CoinSpawn spawn) {
 
-        yield return new WaitForSeconds(coinSpawnDelay * 3f);
+        yield return new WaitForSeconds(coinSpawnDelay * 6f);
 
         unusableCoinSpawns.Remove(spawn);
     }
 
     IEnumerator DoorCoolDown(Door door) {
 
-        yield return new WaitForSeconds(enemySpawnDelay * 10f);
+        yield return new WaitForSeconds(enemySpawnDelay * 15f);
 
         unusableDoors.Remove(door);
     }
