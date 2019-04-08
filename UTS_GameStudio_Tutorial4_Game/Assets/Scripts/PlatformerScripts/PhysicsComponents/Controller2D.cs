@@ -114,7 +114,13 @@ public class Controller2D : RayCastUser {
             HorizontalCollisions(ref input);
         }
 
+        if (!Utilities.Vector3Equals(input, Vector3.zero)) {
+
+            Physics2D.SyncTransforms();
+        }
+
         // Update Collisons if player is moving vertically (jumping or falling).
+
         if (input.y != 0) {
             VerticalCollisions(ref input);
         }
@@ -127,8 +133,8 @@ public class Controller2D : RayCastUser {
             if (isStandingOnPlatform) {
                 collisionInformation.isBelow = true;
             }
-
             Physics2D.SyncTransforms();
+            Physics.SyncTransforms();
         }
     }
 
