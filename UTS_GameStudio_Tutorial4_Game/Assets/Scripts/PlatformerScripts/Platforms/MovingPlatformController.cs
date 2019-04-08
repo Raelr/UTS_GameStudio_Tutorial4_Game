@@ -1,10 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Collections.Generic;
 
 public class MovingPlatformController : RayCastUser {
-    public Vector3 move;
 
     public LayerMask passengerMask;
 
@@ -17,16 +15,18 @@ public class MovingPlatformController : RayCastUser {
         base.Start();
     }
 
-    private void Update() {
-        UpdateRayCastOrigins();
+    public void MovePlatform(Vector3 velocity) {
 
-        Vector3 velocity = move * Time.deltaTime;
+        UpdateRayCastOrigins();
 
         CalculatePassengerMovement(velocity);
 
         MovePassengers(true);
+
         transform.Translate(velocity);
+
         MovePassengers(false);
+
     }
 
     void MovePassengers(bool isMovingBeforePlatform) {
@@ -62,6 +62,7 @@ public class MovingPlatformController : RayCastUser {
 
             for (int i = 0; i < verticalRayCount; i++) {
 
+                
                 // Deterrmine where to start shooting the rays from (bottom left of player or bottom right)
                 Vector2 rayOrigin = (directionY == -1) ? rayCastOrigins.bottomLeft : rayCastOrigins.topLeft;
 
@@ -116,6 +117,7 @@ public class MovingPlatformController : RayCastUser {
     }
 
     struct PassengerMovement {
+
         public Transform transform;
         public Vector3 velocity;
         public bool isStandingOnPlatform;
