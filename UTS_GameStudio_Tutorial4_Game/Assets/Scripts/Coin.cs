@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
+    [SerializeField]
+    AudioClip pickUpClip;
+
     void Start() {
 
         StartCoroutine(WaitTenSeconds()); //Self-destruct coin after 10 seconds
@@ -18,6 +21,8 @@ public class Coin : MonoBehaviour
         RandomSpawner.instance.DecrementCoins();
 
         GameManager.instance.IncreaseScore();
+
+        SoundManager.instance.PlaySingleSound(pickUpClip);
 
         Destroy(this.gameObject);
     }

@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoundManager : MonoBehaviour
-{
+public class SoundManager : MonoBehaviour {
     [SerializeField]
     AudioSource playerSounds;
 
@@ -23,12 +22,27 @@ public class SoundManager : MonoBehaviour
         instance = this;
     }
 
-    void Start()
-    {
+    void Start() {
 
         backgroundMusic.clip = backgroundClip;
         backgroundMusic.Play();
     }
-    
-    
+
+    public void PlaySingleSound(AudioClip clip) {
+
+        singleSounds.clip = clip;
+        singleSounds.PlayOneShot(clip);
+    }
+
+    public void PlayPlayerSound(AudioClip clip) {
+
+        if (playerSounds.clip != clip) {
+            playerSounds.clip = clip;
+        }
+
+
+        if (!playerSounds.isPlaying) {
+            playerSounds.PlayOneShot(clip);
+        }
+    }
 }
