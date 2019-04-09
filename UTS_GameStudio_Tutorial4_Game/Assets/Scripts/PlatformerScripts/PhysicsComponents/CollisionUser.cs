@@ -12,6 +12,8 @@ public abstract class CollisionUser : MonoBehaviour
     [SerializeField]
     protected Controller2D controller;
 
+    protected Dictionary<Collider2D, Platform> platforms = new Dictionary<Collider2D, Platform>();
+
     protected abstract bool IgnoreCollisions(RaycastHit2D hit, float direction = 0, bool isCrouching = false);
 
     protected void Initialise() {
@@ -23,12 +25,25 @@ public abstract class CollisionUser : MonoBehaviour
         controller.onCollision += CheckPlatformCollider;
     }
 
-    public void CheckPlatformCollider(RaycastHit2D hit) {
+    public void CheckPlatformCollider(RaycastHit2D[] hits) {
 
-        if (hit.collider != currentPlatformCollider) {
+        foreach (RaycastHit2D hit in hits) {
 
-            currentPlatformCollider = hit.collider;
-            currentPlatform = hit.transform.GetComponent<Platform>();
+            if (hit.collider != currentPlatformCollider) {
+
+                currentPlatformCollider = hit.collider;
+
+                if (!platforms.ContainsKey(currentPlatformCollider)) {
+
+                    currentPlatform = hit.transform.GetComponent<Platform>();
+
+                    platforms.Add(currentPlatformCollider, currentPlatform);
+
+                } else {
+
+                    currentPlatform = platforms[currentPlatformCollider];
+                }
+            }
         }
     }
 }

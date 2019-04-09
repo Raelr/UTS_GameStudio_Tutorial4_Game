@@ -9,6 +9,7 @@ TagManager:
   - Door
   - Coin
   - Elevator
+  - CoinSpawn
   layers:
   - Default
   - TransparentFX

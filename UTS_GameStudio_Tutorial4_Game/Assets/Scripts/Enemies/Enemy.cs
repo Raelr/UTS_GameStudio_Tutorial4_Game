@@ -9,7 +9,7 @@ public abstract class Enemy : CollisionUser {
     public bool CanMove { get { return canMove; } set { canMove = value; } }
 
     [SerializeField]
-    protected Collider2D collider;
+    protected Collider2D boxCollider;
 
     [SerializeField]
     protected Animator animator;
@@ -17,19 +17,21 @@ public abstract class Enemy : CollisionUser {
     protected Vector3 direction;
 
     [SerializeField]
-    SpriteRenderer renderer;
+    SpriteRenderer spriteRenderer;
 
     protected bool isAlive;
 
     protected bool canMove;
 
+    bool instantiated = false;
+
     protected void Move() {
 
-        if (Utilities.Vector3Equals(direction, Vector3.right) && controller.CollisionInformation.isRight) {
+        if (Utilities.Vector3Equals(direction, Vector3.right) && controller.CollisionInfo.isRight) {
 
             direction = -Vector3.right;
 
-        } else if (Utilities.Vector3Equals(direction, -Vector3.right) && controller.CollisionInformation.isLeft) {
+        } else if (Utilities.Vector3Equals(direction, -Vector3.right) && controller.CollisionInfo.isLeft) {
 
             direction = Vector3.right;
         }
@@ -50,15 +52,15 @@ public abstract class Enemy : CollisionUser {
 
             if (Utilities.Vector3Equals(direction, Vector3.right)) {
 
-                if (renderer.transform.rotation.y == 0) {
-                    renderer.transform.rotation = Quaternion.Euler(new Vector3(renderer.transform.rotation.eulerAngles.x, 180, renderer.transform.rotation.eulerAngles.z));
+                if (spriteRenderer.transform.rotation.y == 0) {
+                    spriteRenderer.transform.rotation = Quaternion.Euler(new Vector3(spriteRenderer.transform.rotation.eulerAngles.x, 180, spriteRenderer.transform.rotation.eulerAngles.z));
                 }
 
             } else if (Utilities.Vector3Equals(direction, -Vector3.right)) {
 
-                if (renderer.transform.rotation.y == 180) {
+                if (spriteRenderer.transform.rotation.y == 180) {
 
-                    renderer.transform.rotation = Quaternion.Euler(new Vector3(renderer.transform.rotation.eulerAngles.x, 0, renderer.transform.rotation.eulerAngles.z));
+                    spriteRenderer.transform.rotation = Quaternion.Euler(new Vector3(spriteRenderer.transform.rotation.eulerAngles.x, 0, spriteRenderer.transform.rotation.eulerAngles.z));
                 }
             }
         }
@@ -68,19 +70,47 @@ public abstract class Enemy : CollisionUser {
 
         controller = GetComponent<Controller2D>();
 
-        collider = GetComponent<BoxCollider2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
 
-        renderer = GetComponentInChildren<SpriteRenderer>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         CanMove = true;
 
         controller.ignoringCollisions += IgnoreCollisions;
 
         controller.onCollision += CheckPlatformCollider;
+
+        controller.onCollision += OnPlayerCollisionAfterInstatiation;
+
     }
 
     protected override bool IgnoreCollisions(RaycastHit2D hit, float direction = 0, bool isCrouching = false) {
 
-        return hit.transform.tag == "Enemy";
+        return hit.transform.tag == "Player";
     }
+
+    protected void OnPlayerCollisionAfterInstatiation(RaycastHit2D[] hits) {
+
+        foreach (RaycastHit2D hit in hits) {
+
+            if (hit.transform.tag == "Player" && instantiated) {
+                GameManager.instance.KillPlayer();
+            }
+        }
+
+    }
+
+    public void InitialiseEnemy() {
+
+        StartCoroutine(Initialised());
+    }
+
+    protected IEnumerator Initialised() {
+
+        instantiated = true;
+
+        yield return null;
+
+        instantiated = false;
+    } 
 }
