@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
     private Text _scoreUI;
     private Text _pauseUI;
     private Text _pauseInfoUI;
+
+    [SerializeField]
+    AudioClip loseSound;
     
     private void Awake() {
         
@@ -49,10 +52,21 @@ public class GameManager : MonoBehaviour
 
     public void KillPlayer() {
 
-        LevelManager.RestartLevel();
+        StartCoroutine(PlayDeathClipAndRestart());
     }
 
     public void IncreaseScore() {
         _score += 10;
+    }
+
+    IEnumerator PlayDeathClipAndRestart() {
+
+        float duration = loseSound.length;
+
+        SoundManager.instance.PlaySingleSound(loseSound);
+
+        yield return new WaitForSeconds(duration);
+
+        LevelManager.RestartLevel();
     }
 }
