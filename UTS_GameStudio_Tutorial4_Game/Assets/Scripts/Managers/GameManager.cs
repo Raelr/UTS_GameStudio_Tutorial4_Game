@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -13,21 +14,30 @@ public class GameManager : MonoBehaviour
     private Text _scoreUI;
     private Text _pauseUI;
     private Text _pauseInfoUI;
+    private Image _gameOverPanel;
+    private Text _gameOverUI;
+    private Text _gameOverInfoUI;
+    private bool _playerDead = false;
 
     [SerializeField]
     AudioClip loseSound;
-    
+
     private void Awake() {
-        
+
         if (instance == null) {
             instance = this;
         }
+
+        Time.timeScale = 1f;
     }
 
     private void Start() {
         _scoreUI = GameObject.Find("ScoreUI").GetComponent<Text>();
         _pauseUI = GameObject.Find("PauseUI").GetComponent<Text>();
         _pauseInfoUI = GameObject.Find("PauseInstructionsUI").GetComponent<Text>();
+        _gameOverPanel = GameObject.Find("Panel").GetComponent<Image>();
+        _gameOverUI = GameObject.Find("GameOverUI").GetComponent<Text>();
+        _gameOverInfoUI = GameObject.Find("GameOverInstructionsUI").GetComponent<Text>();
     }
 
     private void Update() {
@@ -48,9 +58,29 @@ public class GameManager : MonoBehaviour
             _pauseUI.color = c;
             _pauseInfoUI.color = c;
         } else if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale == 0f) Application.Quit();
+
+        if (_playerDead && Input.GetKeyDown(KeyCode.Return)) {
+            _playerDead = false;
+            Time.timeScale = 1f;
+            SceneManager.LoadScene("MainMenu");
+            //LevelManager.RestartLevel();
+        } else if (_playerDead && Input.GetKeyDown(KeyCode.Escape)) {
+            Application.Quit();
+        } else if(_playerDead && Input.GetKeyDown(KeyCode.Space)) {
+            LevelManager.RestartLevel();
+        }
     }
 
     public void KillPlayer() {
+        Time.timeScale = 0f;
+        Color c = _gameOverPanel.color;
+        c.a = 255;
+        _gameOverPanel.color = c;
+        c = _gameOverUI.color;
+        c.a = 255;
+        _gameOverUI.color = c;
+        _gameOverInfoUI.color = c;
+        _playerDead = true;
 
         StartCoroutine(PlayDeathClipAndRestart());
     }
@@ -61,12 +91,12 @@ public class GameManager : MonoBehaviour
 
     IEnumerator PlayDeathClipAndRestart() {
 
+        SoundManager.instance.StopBackgroundMusic();
+
         float duration = loseSound.length;
 
         SoundManager.instance.PlaySingleSound(loseSound);
 
         yield return new WaitForSeconds(duration);
-
-        LevelManager.RestartLevel();
     }
 }
