@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class RayCastUser : MonoBehaviour {
 
+    public CollisionInformation CollisionInfo { get { return collisionInformation; } }
+
     protected const float skinWidth = 0.015f;
 
     [Header("RayCast Counts")]

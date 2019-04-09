@@ -27,11 +27,9 @@ public class Controller2D : RayCastUser {
 
     public bool IsCrouching { get; set; }
 
-    public CollisionInformation CollisionInformation { get { return collisionInformation; } }
-
     [Header("Collision Mask")]
     [SerializeField]
-    LayerMask layerMask;
+    LayerMask layerMask = 0;
 
     [Header("Physics Configuration")]
 
@@ -39,16 +37,16 @@ public class Controller2D : RayCastUser {
     float moveSpeed = 3;
 
     [SerializeField]
-    float jumpHeight;
+    float jumpHeight = 0;
 
     [SerializeField]
-    float timeToJumpApex;
+    float timeToJumpApex = 0;
 
     [SerializeField]
-    float accelerationTimeAirborn;
+    float accelerationTimeAirborn = 0;
 
     [SerializeField]
-    float accelerationTimeGrounded;
+    float accelerationTimeGrounded = 0;
 
     [Header("Physics Results")]
     [SerializeField, ReadOnly]
@@ -63,7 +61,7 @@ public class Controller2D : RayCastUser {
 
     [Header("SlopeClimbing")]
     [SerializeField, Range(0, 360)]
-    float maxClimbAngle;
+    float maxClimbAngle = 0;
 
     Vector3 velocity;
 

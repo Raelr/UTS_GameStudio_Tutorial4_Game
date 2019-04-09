@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameInitialiser : MonoBehaviour
 {
     [SerializeField]
-    PrefabSpawner[] prefabs;
+    PrefabSpawner[] prefabs = null;
 
     // Start is called before the first frame update
     void Awake()

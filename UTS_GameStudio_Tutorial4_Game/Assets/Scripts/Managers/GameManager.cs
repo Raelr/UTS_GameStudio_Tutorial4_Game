@@ -18,9 +18,12 @@ public class GameManager : MonoBehaviour
     private Text _gameOverUI;
     private Text _gameOverInfoUI;
     private bool _playerDead = false;
-    
+
+    [SerializeField]
+    AudioClip loseSound;
+
     private void Awake() {
-        
+
         if (instance == null) {
             instance = this;
         }
@@ -73,9 +76,22 @@ public class GameManager : MonoBehaviour
         _gameOverUI.color = c;
         _gameOverInfoUI.color = c;
         _playerDead = true;
+
+        StartCoroutine(PlayDeathClipAndRestart());
     }
 
     public void IncreaseScore() {
         _score += 10;
+    }
+
+    IEnumerator PlayDeathClipAndRestart() {
+
+        float duration = loseSound.length;
+
+        SoundManager.instance.PlaySingleSound(loseSound);
+
+        yield return new WaitForSeconds(duration);
+
+        LevelManager.RestartLevel();
     }
 }

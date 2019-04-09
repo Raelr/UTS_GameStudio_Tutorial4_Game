@@ -10,10 +10,10 @@ public class Lift : MonoBehaviour
     MovingPlatformController platformController;
 
     [SerializeField]
-    BoxCollider2D liftBounds;
+    BoxCollider2D liftBounds = null;
 
     [SerializeField]
-    BoxCollider2D elevatorShaftBounds;
+    BoxCollider2D elevatorShaftBounds = null;
 
     Player player;
 

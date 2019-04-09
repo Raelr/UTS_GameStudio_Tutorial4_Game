@@ -11,12 +11,18 @@ public class Player : CollisionUser {
     bool isHiding;
     Material myMat;
 
-    Coroutine routine;
-
     // Delegate for anything which needs to know whether the player is moving
     public delegate void PlayerMovedHandler();
 
     public event PlayerMovedHandler playerMoved;
+
+    Dictionary<Collider2D, Door> doors = new Dictionary<Collider2D, Door>();
+
+    [SerializeField]
+    AudioClip playerJump;
+
+    [SerializeField]
+    AudioClip playerHide;
 
     private void Awake() {
 
@@ -66,7 +72,12 @@ public class Player : CollisionUser {
         if (Input.GetKey("s") || Input.GetKey("down")) {
 
             crouching = true;
-            isHiding = inDoor;
+
+            isHiding = inDoor && !SpacePressed() && controller.CollisionInfo.isBelow;
+
+            if (isHiding) {
+                SoundManager.instance.PlayPlayerSound(playerHide);
+            }
 
         } else {
             crouching = false;
@@ -84,8 +95,11 @@ public class Player : CollisionUser {
 
             if (SpacePressed()) {
 
-                controller.Jump(ref input);
-
+                if (controller.CollisionInfo.isBelow) {
+                    controller.Jump(ref input);
+                    SoundManager.instance.PlayPlayerSound(playerJump);
+                    isHiding = false;
+                }
             }
 
             controller.ApplyMovement(input);
@@ -148,15 +162,12 @@ public class Player : CollisionUser {
         controller.ignoreNextRayCast = false;
 
         foreach (RaycastHit2D hit in hits) {
-            
+
             if (hit.transform.tag == "Door") {
+
                 hasDoor = true;
 
-                if (routine == null) {
-                    routine = StartCoroutine(WaitUntilNextFrame());
-                } else {
-                    routine = StartCoroutine(WaitUntilNextFrame());
-                }
+                StartCoroutine(WaitUntilNextFrame());
 
                 break;
             }

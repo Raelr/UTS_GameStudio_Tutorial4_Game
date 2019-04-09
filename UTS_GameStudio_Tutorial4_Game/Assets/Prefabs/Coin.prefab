@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 184ebd7ea41149747abf025bf1d21141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickUpClip: {fileID: 8300000, guid: 6867ecec4c178ec498904e55914d025d, type: 3}
 --- !u!114 &5715093627564661731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,3 +149,4 @@ MonoBehaviour:
   jumpVelocity: 0
   gravity: 0
   maxClimbAngle: 0
+  ignoreNextRayCast: 0
