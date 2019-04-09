@@ -45,4 +45,10 @@ public class SoundManager : MonoBehaviour {
             playerSounds.PlayOneShot(clip);
         }
     }
+
+    public void StopBackgroundMusic() {
+         if (backgroundMusic.isPlaying) {
+            backgroundMusic.Stop();
+        }
+    }
 }

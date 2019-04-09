@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour
         if (instance == null) {
             instance = this;
         }
+
+        Time.timeScale = 1f;
     }
 
     private void Start() {
@@ -62,8 +64,11 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1f;
             SceneManager.LoadScene("MainMenu");
             //LevelManager.RestartLevel();
-        } else if (_playerDead && Input.GetKeyDown(KeyCode.Escape))
+        } else if (_playerDead && Input.GetKeyDown(KeyCode.Escape)) {
             Application.Quit();
+        } else if(_playerDead && Input.GetKeyDown(KeyCode.Space)) {
+            LevelManager.RestartLevel();
+        }
     }
 
     public void KillPlayer() {
@@ -86,12 +91,12 @@ public class GameManager : MonoBehaviour
 
     IEnumerator PlayDeathClipAndRestart() {
 
+        SoundManager.instance.StopBackgroundMusic();
+
         float duration = loseSound.length;
 
         SoundManager.instance.PlaySingleSound(loseSound);
 
         yield return new WaitForSeconds(duration);
-
-        LevelManager.RestartLevel();
     }
 }
