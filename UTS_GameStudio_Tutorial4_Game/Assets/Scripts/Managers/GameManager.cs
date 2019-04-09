@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -53,11 +54,12 @@ public class GameManager : MonoBehaviour
             _pauseInfoUI.color = c;
         } else if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale == 0f) Application.Quit();
 
-        if (_playerDead && Input.GetKeyDown(KeyCode.Return) && Time.timeScale == 0f) {
+        if (_playerDead && Input.GetKeyDown(KeyCode.Return)) {
             _playerDead = false;
             Time.timeScale = 1f;
-            LevelManager.RestartLevel();
-        } else if (_playerDead && Input.GetKeyDown(KeyCode.Escape) && Time.timeScale == 0f)
+            SceneManager.LoadScene("MainMenu");
+            //LevelManager.RestartLevel();
+        } else if (_playerDead && Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
     }
 
@@ -66,6 +68,8 @@ public class GameManager : MonoBehaviour
         Color c = _gameOverPanel.color;
         c.a = 255;
         _gameOverPanel.color = c;
+        c = _gameOverUI.color;
+        c.a = 255;
         _gameOverUI.color = c;
         _gameOverInfoUI.color = c;
         _playerDead = true;
