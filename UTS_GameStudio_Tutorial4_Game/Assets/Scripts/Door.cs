@@ -5,7 +5,7 @@ using UnityEngine;
 public class Door : MonoBehaviour
 {
     [SerializeField]
-    Enemy enemyScript;
+    Enemy enemyScript = null;
     [SerializeField]
     Color warningColor = Color.red;
     [SerializeField]
@@ -14,6 +14,8 @@ public class Door : MonoBehaviour
     bool isSpawning = false;
     Vector3 offset;
     Material mat;
+
+    public bool PlayerWithin;
 
     void Start() {
         mat = GetComponent<Renderer>().material;
@@ -40,7 +42,8 @@ public class Door : MonoBehaviour
             }
         }else if (isSpawning){
             isSpawning = false;
-            Instantiate(enemyScript, transform.position + offset, Quaternion.identity);
+            Enemy enemy = Instantiate(enemyScript, transform.position + offset, Quaternion.identity);
+            enemy.InitialiseEnemy();
         }
     }
 }
